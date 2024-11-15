@@ -13,8 +13,9 @@ import uk.co.caprica.vlcj.media.MetaData;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class MediaPlayer {
-    private final MediaPlayerFactory factory;
-    private final EmbeddedMediaPlayer mediaPlayer;
+    private MediaPlayerFactory factory;
+    private EmbeddedMediaPlayer mediaPlayer;
+    private boolean isInitialized;
     
     public MediaPlayer() {
         NativeLibrary.addSearchPath(
@@ -22,8 +23,25 @@ public class MediaPlayer {
         NativeLibrary.addSearchPath(
                 RuntimeUtil.getLibVlcCoreLibraryName(), "native");
         // Privacy compliant code: --no-metadata-network-access
-        factory = new MediaPlayerFactory("--no-metadata-network-access");
-        mediaPlayer = factory.mediaPlayers().newEmbeddedMediaPlayer();
+    }
+    
+    public static MediaPlayer init() {
+        MediaPlayer player = new MediaPlayer();
+        try {
+            player.factory = 
+                    new MediaPlayerFactory("--no-metadata-network-access");
+            player.mediaPlayer = 
+                    player.factory.mediaPlayers().newEmbeddedMediaPlayer();
+            player.isInitialized = true;
+        } catch (Exception e) {
+            player.isInitialized = false;
+        }
+        
+        return player;
+    }
+    
+    public boolean isInitialized() {
+        return isInitialized;
     }
     
     
