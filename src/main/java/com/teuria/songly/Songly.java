@@ -100,7 +100,7 @@ public class Songly extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-        player.selectAndPlay("Spica.m4a");
+        
     }//GEN-LAST:event_homeButtonActionPerformed
 
     /**
