@@ -8,7 +8,6 @@ import java.util.HashMap;
 public class SimpleNotationReader {
     private final HashMap<String, Integer> sections;
     private final ArrayList<SimpleNotation> notations;
-    private int len;
     
     public SimpleNotationReader() {
         sections = new HashMap<>();
@@ -102,6 +101,6 @@ public class SimpleNotationReader {
     }
     
     public int getLength() {
-        return len;
+        return sections.size();
     }
 }
