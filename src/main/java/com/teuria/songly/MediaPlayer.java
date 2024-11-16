@@ -46,18 +46,30 @@ public class MediaPlayer {
     
     
     public void selectAndPlay(String path) {
+        if (!isInitialized) {
+            return;
+        }
         mediaPlayer.media().play(path);
     }
     
     public void play(String path) {
+        if (!isInitialized) {
+            return;
+        }
         mediaPlayer.controls().play();
     }
     
     public void stop() {
+        if (!isInitialized) {
+            return;
+        }
         mediaPlayer.controls().stop();
     }
     
     public void pause() {
+        if (!isInitialized) {
+            return;
+        }
         mediaPlayer.controls().pause();
     }
     
