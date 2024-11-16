@@ -1,6 +1,7 @@
 package com.teuria.songly;
 
 import com.sun.jna.NativeLibrary;
+import java.io.File;
 import java.util.concurrent.CountDownLatch;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
@@ -27,14 +28,24 @@ public class MediaPlayer {
     
     public static MediaPlayer init() {
         MediaPlayer player = new MediaPlayer();
-        try {
+        
+        File file = new File("native");
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            if (file.exists() && file.isDirectory()) {
+                player.factory = 
+                        new MediaPlayerFactory("--no-metadata-network-access");
+                player.mediaPlayer = 
+                        player.factory.mediaPlayers().newEmbeddedMediaPlayer();
+                player.isInitialized = true;
+            } else {
+                player.isInitialized = false;
+            }
+        } else {
             player.factory = 
                     new MediaPlayerFactory("--no-metadata-network-access");
             player.mediaPlayer = 
                     player.factory.mediaPlayers().newEmbeddedMediaPlayer();
-            player.isInitialized = true;
-        } catch (Exception e) {
-            player.isInitialized = false;
+            player.isInitialized = true;    
         }
         
         return player;
