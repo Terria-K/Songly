@@ -1,8 +1,10 @@
 package com.teuria.songly;
 
 import com.sun.jna.NativeLibrary;
+import com.teuria.songly.api.MusicController;
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
+import javax.swing.SwingUtilities;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.media.Media;
@@ -11,12 +13,14 @@ import uk.co.caprica.vlcj.media.MediaEventListener;
 import uk.co.caprica.vlcj.media.MediaParsedStatus;
 import uk.co.caprica.vlcj.media.Meta;
 import uk.co.caprica.vlcj.media.MetaData;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class MediaPlayer {
     private MediaPlayerFactory factory;
     private EmbeddedMediaPlayer mediaPlayer;
     private boolean isInitialized;
+    private MusicController controller;
     
     public MediaPlayer() {
         NativeLibrary.addSearchPath(
@@ -45,7 +49,22 @@ public class MediaPlayer {
                     new MediaPlayerFactory("--no-metadata-network-access");
             player.mediaPlayer = 
                     player.factory.mediaPlayers().newEmbeddedMediaPlayer();
-            player.isInitialized = true;    
+            player.isInitialized = true;  
+            
+            player.mediaPlayer.events().addMediaPlayerEventListener(
+                    new MediaPlayerEventAdapter() {
+                
+                @Override
+                public void finished(
+                        uk.co.caprica.vlcj.player.base.MediaPlayer player2) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            player.controller.finished(player);
+                        }
+                    });
+                }
+            });
         }
         
         return player;
