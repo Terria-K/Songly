@@ -32,7 +32,6 @@ public class ExampleModel implements NotationModel {
 
     @Override
     public void read(SimpleNotation reader) {
-        this.id = Integer.parseInt(reader.getSectionName());
         this.name = reader.get("name");
         this.section = reader.get("section");
         this.numbers = reader.getInt("numbers");
