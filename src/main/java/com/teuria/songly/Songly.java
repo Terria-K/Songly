@@ -1,15 +1,16 @@
 package com.teuria.songly;
 
 
+import com.teuria.songly.models.ExampleModel;
+import com.teuria.songly.notation.SimpleNotationReader;
+import com.teuria.songly.notation.SimpleNotationWriter;
+import javax.swing.JOptionPane;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.MaterialOceanicTheme;
 
-/**
- *
- * @author teuria
- */
+
 public class Songly extends javax.swing.JFrame {
-    private MediaPlayer player;
+    private final MediaPlayer player;
 
     /**
      * Creates new form MMusic
@@ -19,11 +20,20 @@ public class Songly extends javax.swing.JFrame {
         initComponents();
         player = MediaPlayer.init();
         if (!player.isInitialized()) {
-            ErrorDialog dialog = new ErrorDialog();
-            dialog.setTitle("No VLC is installed, media player will not work!");
-            dialog.setVisible(true);
-            dialog.toFront();
+            JOptionPane.showMessageDialog(this,
+                "No VLC is installed, media player will not work!",
+                "ERROR.",
+                JOptionPane.ERROR_MESSAGE);
         }
+        
+        SimpleNotationReader reader = new SimpleNotationReader();
+        reader.loadFile("Save.nb");
+        
+        ExampleModel model = new ExampleModel("Title", "Section", 4);
+        var notation = model.write();
+        SimpleNotationWriter writer = new SimpleNotationWriter();
+        writer.write(notation);
+        writer.save("Save.nb");
     }
 
     /**

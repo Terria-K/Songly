@@ -2,27 +2,25 @@ package com.teuria.songly.models;
 
 import com.teuria.songly.notation.NotationModel;
 import com.teuria.songly.notation.SimpleNotation;
+import java.util.Base64;
 
 
 public class ExampleModel implements NotationModel {
     private String name;
     private String section;
     private int numbers;
-    private int id;
-    private static int idIncrementor;
     
     public ExampleModel(String name, String section, int numbers) {
         this.name = name;
         this.section = section;
         this.numbers = numbers;
-        this.id = idIncrementor++;
     }
     
     public ExampleModel() {}
     
     @Override
     public SimpleNotation write() {
-        SimpleNotation notation = new SimpleNotation(id+"");
+        SimpleNotation notation = new SimpleNotation(Base64.getEncoder().encodeToString((name+"").getBytes()));
         
         notation.add("name", name);
         notation.add("section", section);

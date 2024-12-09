@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SimpleNotationReader {
     private final HashMap<String, Integer> sections;
@@ -91,6 +92,9 @@ public class SimpleNotationReader {
         }
     }
     
+    public ArrayList<SimpleNotation> getAll() {
+        return notations;
+    }
     
     public SimpleNotation get(String key) {
         return notations.get(sections.get(key));

@@ -12,9 +12,8 @@ public class SimpleNotationWriter {
         builder = new StringBuilder();
     }
     
-    // I use generics for optimization
-    // This will devirtualized function call at compile-time
-    public <T> void write(SimpleNotation notation) {
+    
+    public void write(SimpleNotation notation) {
         builder.append("[")
                 .append(notation.getSectionName())
                 .append("]\n");
