@@ -1,20 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.teuria.songly;
 
-/**
- *
- * @author teuria
- */
-public class MusicPanel extends javax.swing.JPanel {
+import com.teuria.songly.models.Music;
 
+
+public class MusicPanel extends javax.swing.JPanel {
+    private Music music;
     /**
      * Creates new form MusicPanel
      */
-    public MusicPanel() {
+    public MusicPanel(Music music) {
         initComponents();
+        this.music = music;
+        title.setText(music.getTitle());
+        artist.setText(music.getArtist());
     }
 
     /**
@@ -26,13 +24,15 @@ public class MusicPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        title = new javax.swing.JLabel();
+        artist = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        jLabel1.setText("Title");
+        setMaximumSize(new java.awt.Dimension(32767, 51));
 
-        jLabel2.setText("Artist");
+        title.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        title.setText("Title");
+
+        artist.setText("Artist");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -41,22 +41,22 @@ public class MusicPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(title)
+                    .addComponent(artist))
                 .addContainerGap(804, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2))
+                .addComponent(artist))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel artist;
+    private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
