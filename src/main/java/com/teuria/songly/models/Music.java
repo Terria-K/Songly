@@ -7,18 +7,14 @@ import java.util.Base64;
 
 public class Music implements NotationModel {
     private String title;
-    private String song;
     private String artist;
     private String album;
+    private String directory;
     private String path;
     private String id;
 
     public String getTitle() {
         return title;
-    }
-
-    public String getSong() {
-        return song;
     }
 
     public String getArtist() {
@@ -36,27 +32,33 @@ public class Music implements NotationModel {
     public String getId() {
         return id;
     }
+
+    public String getDirectory() {
+        return directory;
+    }
     
-    public Music (String title, String song, String artist, String album, 
-            String path, String id) {
+    public Music (String title, String artist, String album, String directory, 
+            String path) {
         this.title = title;
-        this.song = song;
         this.artist = artist;
         this.album = album;
+        this.directory = directory;
         this.path = path;
-        this.id = id;
+        this.id = Base64.getEncoder().encodeToString(path.getBytes());
     }
+    
+    public Music() {}
 
     @Override
     public SimpleNotation write() {
      SimpleNotation notation = new SimpleNotation(
-             Base64.getEncoder().encodeToString(id.getBytes()));   
+             Base64.getEncoder().encodeToString(path.getBytes()));   
     
      notation.add("title", title);
-     notation.add("song", song);
      notation.add("artist", artist);
      notation.add("album", album);
      notation.add("path", path);
+     notation.add("directory", directory);
      
      return notation;
     }
@@ -65,10 +67,10 @@ public class Music implements NotationModel {
     @Override
     public void read(SimpleNotation reader) {
         this.title = reader.get("title");
-        this.song = reader.get("song");
         this.artist = reader.get("artist");
         this.album = reader.get("album");
         this.path = reader.get("path");
+        this.directory = reader.get("directory");
         this.id = reader.getSectionName();
     }
     

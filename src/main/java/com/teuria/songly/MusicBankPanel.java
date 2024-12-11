@@ -22,6 +22,7 @@ public class MusicBankPanel extends javax.swing.JPanel {
      */
     public MusicBankPanel() {
         initComponents();
+        refresh();
     }
 
     /**
@@ -111,6 +112,7 @@ public class MusicBankPanel extends javax.swing.JPanel {
             Database.addAndIndex(path);
             refresh();
             pathField.setText("");
+            Database.save();
             return;
         }
         JOptionPane.showMessageDialog(this,
@@ -137,6 +139,7 @@ public class MusicBankPanel extends javax.swing.JPanel {
             folderList.add(new MusicBankItem(str, (path) -> {
                 Database.removeFolder(path);
                 refresh();
+                Database.save();
             }));
         }
     }

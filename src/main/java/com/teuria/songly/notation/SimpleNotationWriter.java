@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SimpleNotationWriter {
-    private final StringBuilder builder;
+    private StringBuilder builder;
     
     public SimpleNotationWriter() {
         builder = new StringBuilder();
@@ -24,6 +24,10 @@ public class SimpleNotationWriter {
                 .append(e.getValue())
                 .append('\n');
         }
+    }
+    
+    public void clear() {
+        builder = new StringBuilder();
     }
     
     public void save(String path) {

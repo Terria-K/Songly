@@ -4,6 +4,7 @@
  */
 package com.teuria.songly;
 
+import com.teuria.songly.models.Music;
 import javax.swing.JOptionPane;
 import mdlaf.MaterialLookAndFeel;
 import mdlaf.themes.MaterialOceanicTheme;
@@ -18,17 +19,17 @@ public class SonglyForm extends javax.swing.JFrame {
      * Creates new form SonglyForm
      */
     public SonglyForm() {
-        initComponents();
+        Database.load();
+        
         setLocationByPlatform(true);
         initComponents();
-        player = MediaPlayer.init();
+        player = Database.initPlayer();
         if (!player.isInitialized()) {
             JOptionPane.showMessageDialog(this,
                 "No VLC is installed, media player will not work!",
                 "ERROR.",
                 JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     /**
@@ -81,6 +82,11 @@ public class SonglyForm extends javax.swing.JFrame {
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         jTabbedPane1.setName(""); // NOI18N
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         playlistScroll.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -227,6 +233,25 @@ public class SonglyForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        refresh();
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void refresh() {
+        if (Database.isRendered()) {
+            return;
+        }
+        
+        songListPanel.removeAll();
+        songListPanel.revalidate();
+        songListPanel.repaint();
+        
+        for (Music music : Database.getMusics()) {
+            MusicPanel panel = new MusicPanel(music);
+            songListPanel.add(panel);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

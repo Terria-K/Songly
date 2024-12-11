@@ -14,6 +14,10 @@ public class SimpleNotation {
     }
     
     public void add(String key, Object value) {
+        if (value == null) {
+            values.put(key, "null");
+            return;
+        }
         values.put(key, value.toString());
     }
     
@@ -30,7 +34,11 @@ public class SimpleNotation {
     }
     
     public String get(String key) {
-        return values.get(key);
+        String value = values.get(key);
+        if (value == "null") {
+            return null;
+        }
+        return value;
     }
     
     public int size() {

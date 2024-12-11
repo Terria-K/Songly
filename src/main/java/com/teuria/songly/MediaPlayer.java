@@ -2,7 +2,9 @@ package com.teuria.songly;
 
 import com.sun.jna.NativeLibrary;
 import com.teuria.songly.api.MusicController;
+import com.teuria.songly.models.Music;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
@@ -103,15 +105,18 @@ public class MediaPlayer {
         mediaPlayer.controls().pause();
     }
     
-    public void test(String path) {
+    public Music toMusic(Path dir, Path path) {
         MetaData testMeta = getSongMetadata(path);
-        System.out.println(testMeta.get(Meta.TITLE));
+        String title = testMeta.get(Meta.TITLE);
+        String artist = testMeta.get(Meta.ARTIST);
+        String album = testMeta.get(Meta.ALBUM);
+        return new Music(title, artist, album, dir.toString(), path.toString());
     }
     
-    public MetaData getSongMetadata(String path) {
+    public MetaData getSongMetadata(Path path) {
         Media media = null;
         try {
-            media = parseMedia(path);
+            media = parseMedia(path.toString());
             // FIXME: could be dangerous to return the MetaData itself while
             // it is released.
             return media.meta().asMetaData();

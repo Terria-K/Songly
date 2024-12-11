@@ -17,6 +17,8 @@ public class SimpleNotationReader {
     
     public void loadFile(String path) {
         try {
+            sections.clear();
+            notations.clear();
             FileReader reader = new FileReader(path);
             read(reader);
             
@@ -53,13 +55,16 @@ public class SimpleNotationReader {
             
             if (Character.isWhitespace(c)) {
                 if (valueOpened) {
-                    valueOpened = false;
-                    String value = builder.toString();
-                    notations.get(currentNotation).add(currentKey, value);
-                    builder = new StringBuilder();
+                    if (c == '\n') {    
+                        valueOpened = false;
+                        String value = builder.toString();
+                        notations.get(currentNotation).add(currentKey, value);
+                        builder = new StringBuilder();
+                        continue;
+                    }
+                } else {               
                     continue;
                 }
-                continue;
             }
             
             if (valueOpened) {
