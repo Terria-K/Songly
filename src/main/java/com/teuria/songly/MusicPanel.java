@@ -5,14 +5,16 @@ import com.teuria.songly.models.Music;
 
 public class MusicPanel extends javax.swing.JPanel {
     private Music music;
+    private ClickEvent clickEvent;
     /**
      * Creates new form MusicPanel
      */
-    public MusicPanel(Music music) {
+    public MusicPanel(Music music, ClickEvent evt) {
         initComponents();
         this.music = music;
         title.setText(music.getTitle());
         artist.setText(music.getArtist());
+        this.clickEvent = evt;
     }
 
     /**
@@ -28,6 +30,11 @@ public class MusicPanel extends javax.swing.JPanel {
         artist = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(32767, 51));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         title.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         title.setText("Title");
@@ -54,9 +61,17 @@ public class MusicPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        clickEvent.run(music);
+    }//GEN-LAST:event_formMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel artist;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
+}
+
+interface ClickEvent {
+    void run(Music music);
 }

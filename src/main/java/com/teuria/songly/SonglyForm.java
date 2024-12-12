@@ -247,7 +247,9 @@ public class SonglyForm extends javax.swing.JFrame {
         songListPanel.repaint();
         
         for (Music music : Database.getMusics()) {
-            MusicPanel panel = new MusicPanel(music);
+            MusicPanel panel = new MusicPanel(music, (m) -> {
+                player.selectAndPlay(m.getPath());
+            });
             songListPanel.add(panel);
         }
     }
