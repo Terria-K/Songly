@@ -1,6 +1,7 @@
 
 package com.teuria.songly.models;
 
+import com.teuria.songly.Database;
 import com.teuria.songly.notation.NotationModel;
 import com.teuria.songly.notation.SimpleNotation;
 import java.util.ArrayList;
@@ -10,18 +11,47 @@ public class Playlist implements NotationModel {
 
     private String title;
     private int songCount;
-    private ArrayList<Music> arrayOfSong;
+    private ArrayList<Music> songs;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getSongCount() {
+        return songCount;
+    }
+
+    public ArrayList<Music> getSongs() {
+        return songs;
+    }
+
+    public Playlist(String title, int songCount, ArrayList<Music> songs) {
+        this.title = title;
+        this.songCount = songCount;
+        this.songs = songs;
+    }
     
+    public Playlist(String title, int songCount) {
+        this.title = title;
+        this.songCount = songCount;
+        this.songs = new ArrayList<>();
+    }
+    
+    public Playlist() {
+        this.songs = new ArrayList<>();
+    }
     
     @Override
     public SimpleNotation write() {
-        SimpleNotation notation = new SimpleNotation("");
-        notation.add("title", title);
+        SimpleNotation notation = new SimpleNotation(title);
         notation.add("songCount", songCount);
         
         ArrayList<String> strs = new ArrayList<>();
-        for (Music song : arrayOfSong) {
-            strs.add(song.getId());
+       
+        if (songs.size() != 0) {
+            for (Music song : songs) {
+                strs.add(song.getId());
+            }
         }
         notation.add("songs", String.join(",", strs));
         
@@ -30,11 +60,20 @@ public class Playlist implements NotationModel {
 
     @Override
     public void read(SimpleNotation reader) {
-        title = reader.get("title");
+        title = reader.getSectionName();
         songCount = reader.getInt("songCount");
         
-        // TODO implement a way to retrieve songs from playlist
         String[] songsStr = reader.get("songs").split(",");
+        
+        ArrayList<Music> songs = new ArrayList<>();
+        
+        if (songCount != 0) {
+            for (String id : songsStr) {
+                songs.add(Database.getMusic(id));
+            }   
+        }
+        
+        this.songs = songs;
     }
     
 }

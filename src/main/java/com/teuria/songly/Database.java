@@ -50,6 +50,28 @@ public class Database {
         musicLibraries.remove(music.getId());
     }
     
+    public static void addPlaylist(Playlist playlist) {
+        playlists.add(playlist);
+    }
+    
+    public static Collection<Playlist> getPlaylists() {
+        return playlists;
+    }
+    
+    public static boolean hasPlaylist(String name) {
+        for (Playlist playlist : playlists) {
+            if (playlist.getTitle().contains(name)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public static void removePlaylist(Playlist playlist) {
+        playlists.remove(playlist);
+    }
+    
     public static void setAsRendered() {
         rendered = true;
     }
@@ -132,6 +154,14 @@ public class Database {
         
         writer.save("songs.nb");
         writer.clear();
+        
+        for (Playlist playlist : playlists) {
+            SimpleNotation notation = playlist.write();
+            writer.write(notation);
+        }
+        
+        writer.save("playlist.nb");
+        writer.clear();
     }
     
     public static void load() {
@@ -149,6 +179,15 @@ public class Database {
                 Music music = new Music();
                 music.read(notation);
                 addMusic(music);
+            }
+        }
+        
+        if (Files.exists(Paths.get("playlist.nb"))) {
+            reader.loadFile("playlist.nb");
+            for (SimpleNotation notation : reader.getAll()) {
+                Playlist playlist = new Playlist();
+                playlist.read(notation);
+                addPlaylist(playlist);
             }
         }
     }

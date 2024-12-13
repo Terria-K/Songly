@@ -13,6 +13,20 @@ public class Music implements NotationModel {
     private String path;
     private String id;
 
+    
+    public Music (String title, String artist, String album, String directory, 
+            String path) {
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.directory = directory;
+        this.path = path;
+        this.id = Base64.getEncoder().encodeToString(path.getBytes());
+    }
+    
+    public Music() {}
+
+    
     public String getTitle() {
         return title;
     }
@@ -37,18 +51,6 @@ public class Music implements NotationModel {
         return directory;
     }
     
-    public Music (String title, String artist, String album, String directory, 
-            String path) {
-        this.title = title;
-        this.artist = artist;
-        this.album = album;
-        this.directory = directory;
-        this.path = path;
-        this.id = Base64.getEncoder().encodeToString(path.getBytes());
-    }
-    
-    public Music() {}
-
     @Override
     public SimpleNotation write() {
      SimpleNotation notation = new SimpleNotation(
