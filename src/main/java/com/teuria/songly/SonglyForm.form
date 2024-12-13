@@ -295,6 +295,9 @@
           <Connection code="jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.SKIP_NEXT, 24, new java.awt.Color(255, 255, 255))" type="code"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nextBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="playPauseBtn">
       <Properties>
@@ -302,6 +305,9 @@
           <Connection code="jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.PLAY_ARROW, 24, new java.awt.Color(255, 255, 255))" type="code"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="playPauseBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="previousBtn">
       <Properties>

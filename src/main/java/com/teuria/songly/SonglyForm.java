@@ -162,8 +162,18 @@ public class SonglyForm extends javax.swing.JFrame {
         jTabbedPane1.addTab("Library", musicBankPanel1);
 
         nextBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.SKIP_NEXT, 24, new java.awt.Color(255, 255, 255)));
+        nextBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextBtnActionPerformed(evt);
+            }
+        });
 
         playPauseBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.PLAY_ARROW, 24, new java.awt.Color(255, 255, 255)));
+        playPauseBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playPauseBtnActionPerformed(evt);
+            }
+        });
 
         previousBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.SKIP_PREVIOUS, 24, new java.awt.Color(255, 255, 255)));
         previousBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +251,7 @@ public class SonglyForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void previousBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousBtnActionPerformed
-        
+        player.previous();
     }//GEN-LAST:event_previousBtnActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
@@ -273,6 +283,24 @@ public class SonglyForm extends javax.swing.JFrame {
         addPlaylistField.setText("");
     }//GEN-LAST:event_addPlaylistBtnActionPerformed
 
+    private void playPauseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playPauseBtnActionPerformed
+        if (player.isPaused()) {
+            playPauseBtn.setIcon(IconFontSwing.buildIcon(
+                    GoogleMaterialDesignIcons.PAUSE, 24, 
+                    new java.awt.Color(255, 255, 255)));
+            player.play();
+        } else {
+            playPauseBtn.setIcon(IconFontSwing.buildIcon(
+                    GoogleMaterialDesignIcons.PLAY_ARROW, 24, 
+                    new java.awt.Color(255, 255, 255)));
+            player.pause();
+        }
+    }//GEN-LAST:event_playPauseBtnActionPerformed
+
+    private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnActionPerformed
+        player.next();
+    }//GEN-LAST:event_nextBtnActionPerformed
+
     private void refreshPlaylist() {
         playlistItemList.removeAll();
         playlistItemList.revalidate();
@@ -297,7 +325,10 @@ public class SonglyForm extends javax.swing.JFrame {
         
         for (Music music : AppState.getMusics()) {
             MusicPanel panel = new MusicPanel(this, music, (m) -> {
-                player.selectAndPlay(m.getPath());
+                playPauseBtn.setIcon(IconFontSwing.buildIcon(
+                        GoogleMaterialDesignIcons.PAUSE, 24, 
+                        new java.awt.Color(255, 255, 255)));
+                player.selectAndPlay(m);
                 songTitle.setText(m.getTitle() + " - " + m.getArtist());
             });
             songListPanel.add(panel);

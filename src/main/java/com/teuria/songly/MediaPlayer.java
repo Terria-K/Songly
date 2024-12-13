@@ -22,7 +22,13 @@ public class MediaPlayer {
     private MediaPlayerFactory factory;
     private EmbeddedMediaPlayer mediaPlayer;
     private boolean isInitialized;
-    private MusicController controller;
+    private boolean paused;
+    
+    private Music previousMusic;
+    private Music currentMusic;
+    private Music nextMusic;
+    
+    
     
     public MediaPlayer() {
         NativeLibrary.addSearchPath(
@@ -62,7 +68,7 @@ public class MediaPlayer {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            player.controller.finished(player);
+                            player.finished();
                         }
                     });
                 }
@@ -77,17 +83,31 @@ public class MediaPlayer {
     }
     
     
-    public void selectAndPlay(String path) {
+    public void selectAndPlay(Music music) {
         if (!isInitialized) {
             return;
         }
-        mediaPlayer.media().play(path);
+        int index = AppState.getIndexFromMusic(music);
+        if (index - 1 >= 0) {
+            previousMusic = AppState.getMusicByIndex(index - 1);
+        } else {
+            previousMusic = null;
+        }
+        currentMusic = AppState.getMusicByIndex(index);
+        
+        if (index + 1 < AppState.getMusics().size()) {
+            nextMusic = AppState.getMusicByIndex(index + 1);
+        } else {
+            nextMusic = null;
+        }
+        mediaPlayer.media().play(music.getPath());
     }
     
-    public void play(String path) {
+    public void play() {
         if (!isInitialized) {
             return;
         }
+        paused = false;
         mediaPlayer.controls().play();
     }
     
@@ -102,7 +122,47 @@ public class MediaPlayer {
         if (!isInitialized) {
             return;
         }
+        paused = true;
         mediaPlayer.controls().pause();
+    }
+    
+    public boolean isPaused() {
+        if (!isInitialized) {
+            return true;
+        }
+        
+        return paused;
+    }
+
+    public void previous() {
+        if (!isInitialized) {
+            return;
+        }
+        
+        if (previousMusic == null) {
+            return;
+        }
+        
+        selectAndPlay(previousMusic);
+    }
+    
+    public void next() {
+        if (!isInitialized) {
+            return;
+        }
+        
+        if (nextMusic == null) {
+            return;
+        }
+        
+        selectAndPlay(nextMusic);
+    }
+    
+    public void finished() {
+        if (nextMusic == null) {
+            return;
+        }
+        selectAndPlay(nextMusic);
     }
     
     public Music toMusic(Path dir, Path path) {
