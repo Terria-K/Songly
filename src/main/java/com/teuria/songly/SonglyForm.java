@@ -173,7 +173,6 @@ public class SonglyForm extends javax.swing.JFrame {
         });
 
         songTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        songTitle.setText("TITLE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -228,12 +227,12 @@ public class SonglyForm extends javax.swing.JFrame {
                     .addComponent(nextBtn)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(60, 60, 60)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(112, Short.MAX_VALUE)))
+                    .addContainerGap(124, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("");
@@ -297,7 +296,7 @@ public class SonglyForm extends javax.swing.JFrame {
         songListPanel.repaint();
         
         for (Music music : Database.getMusics()) {
-            MusicPanel panel = new MusicPanel(music, (m) -> {
+            MusicPanel panel = new MusicPanel(this, music, (m) -> {
                 player.selectAndPlay(m.getPath());
                 songTitle.setText(m.getTitle() + " - " + m.getArtist());
             });

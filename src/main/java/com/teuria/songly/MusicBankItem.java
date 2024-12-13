@@ -4,6 +4,8 @@
  */
 package com.teuria.songly;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author teuria
@@ -69,6 +71,16 @@ public class MusicBankItem extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
+        // 0=yes, 1=no, 2=cancel
+        int input = JOptionPane.showConfirmDialog(null, "Are you sure you want "
+                + "to remove this directory?");
+        
+        // if the input is not 0 which is ok, then we do not proceed further
+        if (input != 0) {
+            return;
+        }
+        
+        // lets fire up the delete event
         this.delEvent.run(this.path);
     }//GEN-LAST:event_delBtnActionPerformed
 

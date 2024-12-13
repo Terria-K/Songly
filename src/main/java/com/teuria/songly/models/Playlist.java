@@ -41,6 +41,19 @@ public class Playlist implements NotationModel {
         this.songs = new ArrayList<>();
     }
     
+    public void addMusic(Music music) {
+        if (!songs.contains(music)) {
+            songs.add(music);
+            songCount += 1;
+        }
+    }
+    
+    public void removeMusic(Music music) {
+        if (songs.remove(music)) {
+            songCount -= 1;
+        }
+    }
+    
     @Override
     public SimpleNotation write() {
         SimpleNotation notation = new SimpleNotation(title);

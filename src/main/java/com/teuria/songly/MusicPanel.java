@@ -1,20 +1,23 @@
 package com.teuria.songly;
 
 import com.teuria.songly.models.Music;
+import javax.swing.JFrame;
 
 
 public class MusicPanel extends javax.swing.JPanel {
     private Music music;
     private ClickEvent clickEvent;
+    private JFrame main;
     /**
      * Creates new form MusicPanel
      */
-    public MusicPanel(Music music, ClickEvent evt) {
+    public MusicPanel(JFrame main, Music music, ClickEvent evt) {
         initComponents();
         this.music = music;
         title.setText(music.getTitle());
         artist.setText(music.getArtist());
         this.clickEvent = evt;
+        this.main = main;
     }
 
     /**
@@ -29,7 +32,7 @@ public class MusicPanel extends javax.swing.JPanel {
         title = new javax.swing.JLabel();
         artist = new javax.swing.JLabel();
         icon = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        addToPlaylistBtn = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(32767, 51));
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -45,7 +48,12 @@ public class MusicPanel extends javax.swing.JPanel {
 
         icon.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.MUSIC_NOTE, 24, new java.awt.Color(255, 255, 255)));
 
-        jButton1.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.PLAYLIST_ADD, 24, new java.awt.Color(255, 255, 255)));
+        addToPlaylistBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.PLAYLIST_ADD, 24, new java.awt.Color(255, 255, 255)));
+        addToPlaylistBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addToPlaylistBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,7 +67,7 @@ public class MusicPanel extends javax.swing.JPanel {
                     .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(artist, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(addToPlaylistBtn)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -72,7 +80,7 @@ public class MusicPanel extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(icon)
-                    .addComponent(jButton1))
+                    .addComponent(addToPlaylistBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -81,11 +89,18 @@ public class MusicPanel extends javax.swing.JPanel {
         clickEvent.run(music);
     }//GEN-LAST:event_formMouseClicked
 
+    private void addToPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToPlaylistBtnActionPerformed
+        // This will initialized a new dialog form called PlaylistForm
+        // we passed around the main JFrame and the music model to this dialog
+        PlaylistForm form = new PlaylistForm(main, music);
+        form.setVisible(true);
+    }//GEN-LAST:event_addToPlaylistBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addToPlaylistBtn;
     private javax.swing.JLabel artist;
     private javax.swing.JLabel icon;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }

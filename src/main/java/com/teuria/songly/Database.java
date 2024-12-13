@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 public class Database {
     private static HashMap<String, Music> musicLibraries = new HashMap<>();
+    private static HashMap<String, Playlist> playlistMap = new HashMap<>();
     private static ArrayList<Music> musics = new ArrayList<>();
     private static ArrayList<Playlist> playlists = new ArrayList<>();
     private static ArrayList<String> folders = new ArrayList<>();
@@ -52,6 +53,11 @@ public class Database {
     
     public static void addPlaylist(Playlist playlist) {
         playlists.add(playlist);
+        playlistMap.put(playlist.getTitle(), playlist);
+    }
+    
+    public static Playlist getPlaylist(String playlistName) {
+        return playlistMap.get(playlistName);
     }
     
     public static Collection<Playlist> getPlaylists() {
@@ -70,6 +76,16 @@ public class Database {
     
     public static void removePlaylist(Playlist playlist) {
         playlists.remove(playlist);
+    }
+    
+    public static void addMusicToPlaylist(String playlistName, Music music) {
+        Playlist playlist = playlistMap.get(playlistName);
+        playlist.addMusic(music);
+    }
+    
+    public static void removeMusicToPlaylist(String playlistName, Music music) {
+        Playlist playlist = playlistMap.get(playlistName);
+        playlist.addMusic(music);        
     }
     
     public static void setAsRendered() {
