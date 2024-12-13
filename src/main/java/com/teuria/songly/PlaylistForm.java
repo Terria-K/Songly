@@ -28,7 +28,7 @@ public class PlaylistForm extends javax.swing.JDialog {
         setLocationByPlatform(true);
         initComponents();
 
-        Collection<Playlist> playlists = Database.getPlaylists();
+        Collection<Playlist> playlists = AppState.getPlaylists();
         checkboxes = new JCheckBox[playlists.size()];
         
         // this is like for loop, but we do it kinda manually
@@ -47,7 +47,7 @@ public class PlaylistForm extends javax.swing.JDialog {
             public void windowClosing(WindowEvent e) {
                 for (JCheckBox checkBox : checkboxes) {
                     String title = checkBox.getText();
-                    Playlist playlist = Database.getPlaylist(title);
+                    Playlist playlist = AppState.getPlaylist(title);
                     if (checkBox.isSelected()) {
                         playlist.addMusic(music);
                     } else {
@@ -55,7 +55,7 @@ public class PlaylistForm extends javax.swing.JDialog {
                     }
                 }
                 
-                Database.save();
+                AppState.save();
             }
         });
     }

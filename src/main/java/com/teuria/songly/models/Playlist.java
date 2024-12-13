@@ -1,7 +1,7 @@
 
 package com.teuria.songly.models;
 
-import com.teuria.songly.Database;
+import com.teuria.songly.AppState;
 import com.teuria.songly.notation.NotationModel;
 import com.teuria.songly.notation.SimpleNotation;
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class Playlist implements NotationModel {
         
         if (songCount != 0) {
             for (String id : songsStr) {
-                songs.add(Database.getMusic(id));
+                songs.add(AppState.getMusic(id));
             }   
         }
         

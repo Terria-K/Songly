@@ -22,11 +22,11 @@ public class SonglyForm extends javax.swing.JFrame {
      * Creates new form SonglyForm
      */
     public SonglyForm() {
-        Database.load();
+        AppState.load();
         
         setLocationByPlatform(true);
         initComponents();
-        player = Database.initPlayer();
+        player = AppState.initPlayer();
         if (!player.isInitialized()) {
             JOptionPane.showMessageDialog(this,
                 "No VLC is installed, media player will not work!",
@@ -258,7 +258,7 @@ public class SonglyForm extends javax.swing.JFrame {
             return;
         }
         
-        if (Database.hasPlaylist(name)) {
+        if (AppState.hasPlaylist(name)) {
             JOptionPane.showMessageDialog(this,
                 "Playlist with this name already exists.",
                 "ERROR.",
@@ -267,8 +267,8 @@ public class SonglyForm extends javax.swing.JFrame {
         }
         
         Playlist playlist = new Playlist(name, 0);
-        Database.addPlaylist(playlist);
-        Database.save();
+        AppState.addPlaylist(playlist);
+        AppState.save();
         refreshPlaylist();
         addPlaylistField.setText("");
     }//GEN-LAST:event_addPlaylistBtnActionPerformed
@@ -278,7 +278,7 @@ public class SonglyForm extends javax.swing.JFrame {
         playlistItemList.revalidate();
         playlistItemList.repaint();
         
-        for (Playlist playlist : Database.getPlaylists()) {
+        for (Playlist playlist : AppState.getPlaylists()) {
             PlaylistItem item = new PlaylistItem(playlist, (pl) -> {
                 
             });
@@ -287,7 +287,7 @@ public class SonglyForm extends javax.swing.JFrame {
     }
     
     private void refresh() {
-        if (Database.isRendered()) {
+        if (AppState.isRendered()) {
             return;
         }
         
@@ -295,7 +295,7 @@ public class SonglyForm extends javax.swing.JFrame {
         songListPanel.revalidate();
         songListPanel.repaint();
         
-        for (Music music : Database.getMusics()) {
+        for (Music music : AppState.getMusics()) {
             MusicPanel panel = new MusicPanel(this, music, (m) -> {
                 player.selectAndPlay(m.getPath());
                 songTitle.setText(m.getTitle() + " - " + m.getArtist());

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Database {
+public class AppState {
     private static HashMap<String, Music> musicLibraries = new HashMap<>();
     private static HashMap<String, Playlist> playlistMap = new HashMap<>();
     private static ArrayList<Music> musics = new ArrayList<>();

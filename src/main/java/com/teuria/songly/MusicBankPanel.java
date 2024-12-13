@@ -109,10 +109,10 @@ public class MusicBankPanel extends javax.swing.JPanel {
         
         Path p = Paths.get(path);
         if (Files.exists(p) && Files.isDirectory(p)) {
-            Database.addAndIndex(path);
+            AppState.addAndIndex(path);
             refresh();
             pathField.setText("");
-            Database.save();
+            AppState.save();
             return;
         }
         JOptionPane.showMessageDialog(this,
@@ -135,11 +135,11 @@ public class MusicBankPanel extends javax.swing.JPanel {
         folderList.removeAll();
         folderList.revalidate();
         folderList.repaint();
-        for (String str : Database.getFolders()) {
+        for (String str : AppState.getFolders()) {
             folderList.add(new MusicBankItem(str, (path) -> {
-                Database.removeFolder(path);
+                AppState.removeFolder(path);
                 refresh();
-                Database.save();
+                AppState.save();
             }));
         }
     }
