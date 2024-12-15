@@ -1,12 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.teuria.songly;
 
 import com.teuria.songly.models.Music;
 import com.teuria.songly.models.Playlist;
+import java.awt.Dimension;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import jiconfont.swing.IconFontSwing;
 import mdlaf.MaterialLookAndFeel;
@@ -22,18 +23,28 @@ public class SonglyForm extends javax.swing.JFrame {
      * Creates new form SonglyForm
      */
     public SonglyForm() {
+        // load the data from the file
         AppState.load();
-        
         setLocationByPlatform(true);
         initComponents();
+        
+        // we initialize our controller for playing music
         player = AppState.initPlayer();
         if (!player.isInitialized()) {
+            // if the user does not have VLC installed (maybe they're on Linux)
+            // we gave them an error message and let them install it.
             JOptionPane.showMessageDialog(this,
                 "No VLC is installed, media player will not work!",
                 "ERROR.",
                 JOptionPane.ERROR_MESSAGE);
         }
         
+        // we set up the event for changing music information for the control
+        // title below..
+        player.addSelectEvent(this::onPlayMusic);
+        player.addTimeEvent(this::onTimeChanged);
+        
+        // we refresh the playlist here, so it will render all the item
         refreshPlaylist();
     }
 
@@ -47,9 +58,9 @@ public class SonglyForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        slider = new javax.swing.JSlider();
+        destinationLabel = new javax.swing.JLabel();
+        currentLabel = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         home = new javax.swing.JPanel();
         songListScroll = new javax.swing.JScrollPane();
@@ -73,11 +84,11 @@ public class SonglyForm extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Songly.png"))); // NOI18N
         jLabel1.setText("SONGLY");
 
-        jSlider1.setValue(0);
+        slider.setValue(0);
 
-        jLabel3.setText("0:00");
+        destinationLabel.setText("0:00");
 
-        jLabel4.setText("0:00");
+        currentLabel.setText("0:00");
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         jTabbedPane1.setName(""); // NOI18N
@@ -195,10 +206,10 @@ public class SonglyForm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 878, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(slider, javax.swing.GroupLayout.PREFERRED_SIZE, 878, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
-                                        .addComponent(jLabel4)
+                                        .addComponent(currentLabel)
                                         .addGap(343, 343, 343)
                                         .addComponent(previousBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,7 +217,7 @@ public class SonglyForm extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel3))))
+                                        .addComponent(destinationLabel))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -229,14 +240,14 @@ public class SonglyForm extends javax.swing.JFrame {
                 .addGap(523, 523, 523)
                 .addComponent(songTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(slider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(previousBtn)
                     .addComponent(playPauseBtn)
                     .addComponent(nextBtn)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3))
+                    .addComponent(currentLabel)
+                    .addComponent(destinationLabel))
                 .addContainerGap(43, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -255,7 +266,8 @@ public class SonglyForm extends javax.swing.JFrame {
     }//GEN-LAST:event_previousBtnActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
-        refresh();
+        refresh(); // refresh whenever changing the tab, so the music list is
+        // always updated
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void addPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPlaylistBtnActionPerformed
@@ -302,19 +314,79 @@ public class SonglyForm extends javax.swing.JFrame {
     }//GEN-LAST:event_nextBtnActionPerformed
 
     private void refreshPlaylist() {
+        // remove all items in the playlist panel
+        // we will then, revalidate it so it will actually be removed
+        // then repaint to rerender the items that they're actually gone
         playlistItemList.removeAll();
         playlistItemList.revalidate();
         playlistItemList.repaint();
         
+        // we will then initialize and add all of the playlist once again
         for (Playlist playlist : AppState.getPlaylists()) {
-            PlaylistItem item = new PlaylistItem(playlist, (pl) -> {
+            PlaylistItem item = new PlaylistItem(playlist, 
+            // setup click event
+            (pl) -> {
+                playlistItemList.removeAll();
+                playlistItemList.revalidate();
+                playlistItemList.repaint();
                 
+                // initialize the container, as well as the button
+                JPanel container = new JPanel();
+                container.setLayout(
+                        new BoxLayout(container, BoxLayout.LINE_AXIS));
+                
+                // we need to set it into a same size as the playlist item
+                // was
+                container.setSize(764, 53);
+                container.setMaximumSize(new Dimension(32767, 53));
+                container.setPreferredSize(new Dimension(764, 53));
+                
+                // set the title based on the playlist name, and set its icon
+                JButton backBtn = new JButton(pl.getTitle());
+                
+                backBtn.setIcon(IconFontSwing.buildIcon(
+                        GoogleMaterialDesignIcons.KEYBOARD_ARROW_LEFT,
+                        24,
+                        new java.awt.Color(255, 255, 255)
+                ));
+                
+                // put it to the left
+                backBtn.setAlignmentX(0);
+                
+                // setup the click event
+                backBtn.addActionListener((evt) -> {
+                    // we'll just reset everything to go back
+                    refreshPlaylist();
+                });
+                // add it to the jframe now
+                container.add(backBtn);
+                playlistItemList.add(container);
+                
+                // add all the rest of the music in the playlist
+                for (Music music : pl.getSongs()) {
+                    MusicItem panel = new MusicItem(
+                        this, music, (m) -> {
+                            player.setPlaylist(pl);
+                            onClickedMusicPanel(m);
+                        });
+                    playlistItemList.add(panel);
+                }
+            },
+            // setup delete event
+            (pl) -> {
+                AppState.removePlaylist(pl);
+                AppState.save();
+                refreshPlaylist();
             });
+            
+            // add the playlist to the lists
             playlistItemList.add(item);
         }
     }
     
     private void refresh() {
+        // just for optimization, so we only refresh when is needed
+        // (after adding or removing music as such)
         if (AppState.isRendered()) {
             return;
         }
@@ -324,15 +396,36 @@ public class SonglyForm extends javax.swing.JFrame {
         songListPanel.repaint();
         
         for (Music music : AppState.getMusics()) {
-            MusicPanel panel = new MusicPanel(this, music, (m) -> {
-                playPauseBtn.setIcon(IconFontSwing.buildIcon(
-                        GoogleMaterialDesignIcons.PAUSE, 24, 
-                        new java.awt.Color(255, 255, 255)));
-                player.selectAndPlay(m);
-                songTitle.setText(m.getTitle() + " - " + m.getArtist());
-            });
+            MusicItem panel = new MusicItem(
+                this, music, (m) -> {
+                    player.setPlaylist(null);
+                    onClickedMusicPanel(m);
+                });
             songListPanel.add(panel);
         }
+    }
+    
+    // this function is called via the event when media player changed
+    // the music
+    private void onPlayMusic(Music music) {
+        // this just change the music information from the control
+        songTitle.setText(music.getTitle() + " - " + music.getArtist());
+        destinationLabel.setText(player.getTimeEndFormatted());
+        slider.setMaximum((int)player.getTimeEnd());
+    }
+    
+    private void onTimeChanged(long time) {
+        currentLabel.setText(player.getCurrentTimeFormatted());
+        slider.setValue((int)player.getCurrentTime());
+    }
+    
+    private void onClickedMusicPanel(Music music) {
+        // this will change the icon of the pause/play on the controls
+        // and then select and play the song from a media player
+        playPauseBtn.setIcon(IconFontSwing.buildIcon(
+                GoogleMaterialDesignIcons.PAUSE, 24, 
+                new java.awt.Color(255, 255, 255)));
+        player.selectAndPlay(music);
     }
     
     /**
@@ -376,11 +469,10 @@ public class SonglyForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPlaylistBtn;
     private javax.swing.JTextField addPlaylistField;
+    private javax.swing.JLabel currentLabel;
+    private javax.swing.JLabel destinationLabel;
     private javax.swing.JPanel home;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.teuria.songly.MusicBankPanel musicBankPanel1;
     private javax.swing.JButton nextBtn;
@@ -389,6 +481,7 @@ public class SonglyForm extends javax.swing.JFrame {
     private javax.swing.JPanel playlistPanel;
     private javax.swing.JScrollPane playlistScroll;
     private javax.swing.JButton previousBtn;
+    private javax.swing.JSlider slider;
     private javax.swing.JPanel songListPanel;
     private javax.swing.JScrollPane songListScroll;
     private javax.swing.JLabel songTitle;

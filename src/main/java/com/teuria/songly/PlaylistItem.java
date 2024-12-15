@@ -4,7 +4,10 @@
  */
 package com.teuria.songly;
 
+import com.teuria.songly.events.PlaylistItemClickEvent;
+import com.teuria.songly.events.PlaylistItemDeleteEvent;
 import com.teuria.songly.models.Playlist;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,13 +16,19 @@ import com.teuria.songly.models.Playlist;
 public class PlaylistItem extends javax.swing.JPanel {
 
     private Playlist playlist;
-    private PlaylistClickEvent clickEvent;
+    private PlaylistItemClickEvent clickEvent;
+    private PlaylistItemDeleteEvent delEvent;
     
-    public PlaylistItem(Playlist playlist, PlaylistClickEvent clickEvent) {
+    public PlaylistItem(
+            Playlist playlist, 
+            PlaylistItemClickEvent clickEvent,
+            PlaylistItemDeleteEvent delEvent
+    ) {
         initComponents();
         this.playlist = playlist;
         this.playlistTitle.setText(playlist.getTitle());
         this.clickEvent = clickEvent;
+        this.delEvent = delEvent;
     }
 
     /**
@@ -32,7 +41,9 @@ public class PlaylistItem extends javax.swing.JPanel {
     private void initComponents() {
 
         playlistTitle = new javax.swing.JLabel();
+        delBtn = new javax.swing.JButton();
 
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         setMaximumSize(new java.awt.Dimension(32767, 64));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -44,6 +55,13 @@ public class PlaylistItem extends javax.swing.JPanel {
         playlistTitle.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.PLAYLIST_PLAY, 24, new java.awt.Color(255, 255, 255)));
         playlistTitle.setText("Name");
 
+        delBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.DELETE, 24, new java.awt.Color(255, 255, 255)));
+        delBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -51,14 +69,18 @@ public class PlaylistItem extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(playlistTitle)
-                .addContainerGap(707, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
+                .addComponent(delBtn)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(playlistTitle)
-                .addGap(21, 21, 21))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(playlistTitle)
+                    .addComponent(delBtn))
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -66,12 +88,22 @@ public class PlaylistItem extends javax.swing.JPanel {
         clickEvent.run(playlist);
     }//GEN-LAST:event_formMouseClicked
 
+    private void delBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtnActionPerformed
+        // 0=yes, 1=no, 2=cancel
+        int input = JOptionPane.showConfirmDialog(null, "Are you sure you want "
+                + "to remove this playlist?");
+        
+        // if the input is not 0 which is ok, then we do not proceed further
+        if (input != 0) {
+            return;
+        }
+        
+        delEvent.run(playlist);
+    }//GEN-LAST:event_delBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton delBtn;
     private javax.swing.JLabel playlistTitle;
     // End of variables declaration//GEN-END:variables
-}
-
-interface PlaylistClickEvent {
-    void run(Playlist playlist);
 }

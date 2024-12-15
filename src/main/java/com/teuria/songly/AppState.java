@@ -34,18 +34,22 @@ public class AppState {
         return player;
     }
     
+    // adds a single music to the AppState array
     public static void addMusic(Music music) {
         musics.add(music);
         musicLibraries.put(music.getId(), music);
         rendered = false;
     }
     
+    // this adds all musics from an array to the AppState array
+    // used by load() function
     public static void addMusics(Collection<Music> musics) {
         for (Music music : musics) {
             addMusic(music);
         }
     }
     
+    // removes a single music from the AppState array
     public static void removeMusic(Music music) {
         musics.remove(music);
         musicLibraries.remove(music.getId());
@@ -104,6 +108,10 @@ public class AppState {
         return musics;
     }
     
+    public static Collection<Music> getMusics(Playlist playlist) {
+        return playlist.getSongs();
+    }
+    
     public static Music getMusicByIndex(int index) {
         return musics.get(index);
     }
@@ -112,6 +120,16 @@ public class AppState {
         return musics.indexOf(music);
     }
     
+    public static int getIndexFromMusic(Playlist playlist, Music music) {
+        return playlist.getSongs().indexOf(music);
+    }
+    
+    public static Music getMusicByIndex(Playlist playlist, int index) {
+        return playlist.getSongs().get(index);
+    }
+    
+    // this adds a folder to the music bank, then index all of the audio file
+    // contains in that folder
     public static void addAndIndex(String folder) {
         if (folders.contains(folder)) {
             return;

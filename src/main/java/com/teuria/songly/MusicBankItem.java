@@ -4,6 +4,7 @@
  */
 package com.teuria.songly;
 
+import com.teuria.songly.events.MusicBankItemDeleteEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,11 +14,11 @@ import javax.swing.JOptionPane;
 public class MusicBankItem extends javax.swing.JPanel {
     
     private String path;
-    private DeleteEvent delEvent;
+    private MusicBankItemDeleteEvent delEvent;
     /**
      * Creates new form MusicBankItem
      */
-    public MusicBankItem(String path, DeleteEvent evt) {
+    public MusicBankItem(String path, MusicBankItemDeleteEvent evt) {
         initComponents();
         this.path = path;
         this.pathText.setText(path);
@@ -41,7 +42,7 @@ public class MusicBankItem extends javax.swing.JPanel {
         pathText.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         pathText.setText("Path");
 
-        delBtn.setText("Delete");
+        delBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.DELETE, 24, new java.awt.Color(255, 255, 255)));
         delBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delBtnActionPerformed(evt);
@@ -89,8 +90,4 @@ public class MusicBankItem extends javax.swing.JPanel {
     private javax.swing.JButton delBtn;
     private javax.swing.JLabel pathText;
     // End of variables declaration//GEN-END:variables
-}
-
-interface DeleteEvent {
-    void run(String path);
 }

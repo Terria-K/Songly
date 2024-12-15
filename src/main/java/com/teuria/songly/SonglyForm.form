@@ -32,10 +32,10 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jSlider1" min="-2" pref="878" max="-2" attributes="0"/>
+                                  <Component id="slider" min="-2" pref="878" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                      <Component id="currentLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="343" max="-2" attributes="0"/>
                                       <Component id="previousBtn" min="-2" pref="39" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -43,7 +43,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="nextBtn" min="-2" pref="39" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="destinationLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -78,14 +78,14 @@
               <EmptySpace min="-2" pref="523" max="-2" attributes="0"/>
               <Component id="songTitle" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jSlider1" min="-2" max="-2" attributes="0"/>
+              <Component id="slider" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="previousBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="playPauseBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="nextBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="currentLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="destinationLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="43" max="32767" attributes="0"/>
           </Group>
@@ -111,17 +111,17 @@
         <Property name="text" type="java.lang.String" value="SONGLY"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSlider" name="jSlider1">
+    <Component class="javax.swing.JSlider" name="slider">
       <Properties>
         <Property name="value" type="int" value="0"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="destinationLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="0:00"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
+    <Component class="javax.swing.JLabel" name="currentLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="0:00"/>
       </Properties>

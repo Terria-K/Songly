@@ -1,17 +1,19 @@
 package com.teuria.songly;
 
+import com.teuria.songly.events.MusicItemClickEvent;
 import com.teuria.songly.models.Music;
 import javax.swing.JFrame;
 
 
-public class MusicPanel extends javax.swing.JPanel {
+public class MusicItem extends javax.swing.JPanel {
     private Music music;
-    private ClickEvent clickEvent;
+    private MusicItemClickEvent clickEvent;
     private JFrame main;
+    
     /**
      * Creates new form MusicPanel
      */
-    public MusicPanel(JFrame main, Music music, ClickEvent evt) {
+    public MusicItem(JFrame main, Music music, MusicItemClickEvent evt) {
         initComponents();
         this.music = music;
         title.setText(music.getTitle());
@@ -34,6 +36,7 @@ public class MusicPanel extends javax.swing.JPanel {
         icon = new javax.swing.JLabel();
         addToPlaylistBtn = new javax.swing.JButton();
 
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         setMaximumSize(new java.awt.Dimension(32767, 51));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -62,25 +65,27 @@ public class MusicPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(icon)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(artist, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
                 .addComponent(addToPlaylistBtn)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(title)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(artist))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(icon)
-                    .addComponent(addToPlaylistBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(title)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(artist))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(icon)
+                            .addComponent(addToPlaylistBtn))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -103,8 +108,4 @@ public class MusicPanel extends javax.swing.JPanel {
     private javax.swing.JLabel icon;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
-}
-
-interface ClickEvent {
-    void run(Music music);
 }

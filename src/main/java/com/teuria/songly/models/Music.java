@@ -64,7 +64,6 @@ public class Music implements NotationModel {
      
      return notation;
     }
-    
 
     @Override
     public void read(SimpleNotation reader) {

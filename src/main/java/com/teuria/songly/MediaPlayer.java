@@ -1,10 +1,14 @@
 package com.teuria.songly;
 
 import com.sun.jna.NativeLibrary;
-import com.teuria.songly.api.MusicController;
+import com.teuria.songly.events.MediaPlayerSelectEvent;
+import com.teuria.songly.events.MediaPlayerTimeEvent;
 import com.teuria.songly.models.Music;
+import com.teuria.songly.models.Playlist;
 import java.io.File;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
 import uk.co.caprica.vlcj.binding.support.runtime.RuntimeUtil;
@@ -23,12 +27,18 @@ public class MediaPlayer {
     private EmbeddedMediaPlayer mediaPlayer;
     private boolean isInitialized;
     private boolean paused;
+    private long currentTime;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("mm:ss");
+    private Date currentDate = new Date(0);
     
     private Music previousMusic;
     private Music currentMusic;
     private Music nextMusic;
     
+    private Playlist currentPlaylist;
     
+    private MediaPlayerSelectEvent selectEvent;
+    private MediaPlayerTimeEvent timeEvent;
     
     public MediaPlayer() {
         NativeLibrary.addSearchPath(
@@ -63,6 +73,25 @@ public class MediaPlayer {
                     new MediaPlayerEventAdapter() {
                 
                 @Override
+                public void timeChanged(
+                        uk.co.caprica.vlcj.player.base.MediaPlayer player2,
+                        long time) {
+                    player.currentTime = time;
+                    player.timeEvent.run(time);
+                }
+                        
+                @Override
+                public void playing(
+                        uk.co.caprica.vlcj.player.base.MediaPlayer player2) {
+                    player.currentTime = 0;
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            player.selectEvent.select(player.currentMusic);
+                        }
+                    });
+                }
+                @Override
                 public void finished(
                         uk.co.caprica.vlcj.player.base.MediaPlayer player2) {
                     SwingUtilities.invokeLater(new Runnable() {
@@ -82,24 +111,55 @@ public class MediaPlayer {
         return isInitialized;
     }
     
+    public void addSelectEvent(MediaPlayerSelectEvent selectEvent) {
+        this.selectEvent = selectEvent;
+    }
+
+    public void addTimeEvent(MediaPlayerTimeEvent timeEvent) {
+        this.timeEvent = timeEvent;
+    }
+    
+    public void setPlaylist(Playlist playlist) {
+        this.currentPlaylist = playlist;
+    }
     
     public void selectAndPlay(Music music) {
         if (!isInitialized) {
             return;
         }
-        int index = AppState.getIndexFromMusic(music);
-        if (index - 1 >= 0) {
-            previousMusic = AppState.getMusicByIndex(index - 1);
-        } else {
-            previousMusic = null;
-        }
-        currentMusic = AppState.getMusicByIndex(index);
         
-        if (index + 1 < AppState.getMusics().size()) {
-            nextMusic = AppState.getMusicByIndex(index + 1);
+        if (currentPlaylist == null) {
+            int index = AppState.getIndexFromMusic(music);
+            if (index - 1 >= 0) {
+                previousMusic = AppState.getMusicByIndex(index - 1);
+            } else {
+                previousMusic = null;
+            }
+            currentMusic = AppState.getMusicByIndex(index);
+
+            if (index + 1 < AppState.getMusics().size()) {
+                nextMusic = AppState.getMusicByIndex(index + 1);
+            } else {
+                nextMusic = null;
+            }
         } else {
-            nextMusic = null;
+            int index = AppState.getIndexFromMusic(currentPlaylist, music);
+            if (index - 1 >= 0) {
+                previousMusic = AppState.getMusicByIndex(
+                        currentPlaylist, index - 1);
+            } else {
+                previousMusic = null;
+            }
+            currentMusic = AppState.getMusicByIndex(currentPlaylist, index);
+
+            if (index + 1 < AppState.getMusics(currentPlaylist).size()) {
+                nextMusic = AppState.getMusicByIndex(
+                        currentPlaylist, index + 1);
+            } else {
+                nextMusic = null;
+            }
         }
+
         mediaPlayer.media().play(music.getPath());
     }
     
@@ -166,11 +226,32 @@ public class MediaPlayer {
     }
     
     public Music toMusic(Path dir, Path path) {
-        MetaData testMeta = getSongMetadata(path);
-        String title = testMeta.get(Meta.TITLE);
-        String artist = testMeta.get(Meta.ARTIST);
-        String album = testMeta.get(Meta.ALBUM);
+        MetaData meta = getSongMetadata(path);
+        String title = meta.get(Meta.TITLE);
+        String artist = meta.get(Meta.ARTIST);
+        String album = meta.get(Meta.ALBUM);
         return new Music(title, artist, album, dir.toString(), path.toString());
+    }
+    
+    public long getTimeEnd() {
+        return mediaPlayer.status().length();
+    }
+    
+    public long getCurrentTime() {
+        return currentTime;
+    }
+    
+    public String getTimeEndFormatted() {
+        long time = getTimeEnd();
+        Date date = new Date(time);
+
+        return dateFormat.format(date);            
+    }
+    
+    public String getCurrentTimeFormatted() {
+        long time = getCurrentTime();
+        currentDate.setTime(time);
+        return dateFormat.format(currentDate);
     }
     
     public MetaData getSongMetadata(Path path) {
@@ -187,6 +268,10 @@ public class MediaPlayer {
                              // Media chunk pointer, we should be good using it
                              // after.
         }
+    }
+    
+    public EmbeddedMediaPlayer getPlayer() {
+        return mediaPlayer;
     }
     
     private Media parseMedia(String path) throws InterruptedException {
