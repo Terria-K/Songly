@@ -19,6 +19,7 @@ import mdlaf.themes.MaterialOceanicTheme;
  */
 public class SonglyForm extends javax.swing.JFrame {
     private final MediaPlayer player;
+    private boolean isSeeking;
     /**
      * Creates new form SonglyForm
      */
@@ -85,6 +86,19 @@ public class SonglyForm extends javax.swing.JFrame {
         jLabel1.setText("SONGLY");
 
         slider.setValue(0);
+        slider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderStateChanged(evt);
+            }
+        });
+        slider.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                sliderMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                sliderMouseReleased(evt);
+            }
+        });
 
         destinationLabel.setText("0:00");
 
@@ -312,6 +326,26 @@ public class SonglyForm extends javax.swing.JFrame {
     private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnActionPerformed
         player.next();
     }//GEN-LAST:event_nextBtnActionPerformed
+
+    private void sliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderStateChanged
+        if (slider.getValueIsAdjusting() || !isSeeking) {
+            return;
+        }
+        
+        SwingUtilities.invokeLater(() -> {
+            player.seek(slider.getValue());
+        });
+    }//GEN-LAST:event_sliderStateChanged
+
+    private void sliderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderMousePressed
+        isSeeking = true;
+        player.pause();
+    }//GEN-LAST:event_sliderMousePressed
+
+    private void sliderMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderMouseReleased
+        isSeeking = false;
+        player.play();
+    }//GEN-LAST:event_sliderMouseReleased
 
     private void refreshPlaylist() {
         // remove all items in the playlist panel

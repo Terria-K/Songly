@@ -254,6 +254,10 @@ public class MediaPlayer {
         return dateFormat.format(currentDate);
     }
     
+    public void seek(long time) {
+        mediaPlayer.controls().setTime(time);
+    }
+    
     public MetaData getSongMetadata(Path path) {
         Media media = null;
         try {
