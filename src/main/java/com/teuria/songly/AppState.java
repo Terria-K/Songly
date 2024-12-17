@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 public class AppState {
     private static HashMap<String, Music> musicLibraries = new HashMap<>();
     private static HashMap<String, Playlist> playlistMap = new HashMap<>();
-    private static ArrayList<Music> musics = new ArrayList<>();
+    private static LinkedList<Music> musics = new LinkedList<>();
     private static ArrayList<Playlist> playlists = new ArrayList<>();
     private static ArrayList<String> folders = new ArrayList<>();
     private static boolean rendered = false;

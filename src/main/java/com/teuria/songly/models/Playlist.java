@@ -5,13 +5,14 @@ import com.teuria.songly.AppState;
 import com.teuria.songly.notation.NotationModel;
 import com.teuria.songly.notation.SimpleNotation;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class Playlist implements NotationModel {
 
     private String title;
     private int songCount;
-    private ArrayList<Music> songs;
+    private LinkedList<Music> songs;
 
     public String getTitle() {
         return title;
@@ -21,11 +22,11 @@ public class Playlist implements NotationModel {
         return songCount;
     }
 
-    public ArrayList<Music> getSongs() {
+    public LinkedList<Music> getSongs() {
         return songs;
     }
 
-    public Playlist(String title, int songCount, ArrayList<Music> songs) {
+    public Playlist(String title, int songCount, LinkedList<Music> songs) {
         this.title = title;
         this.songCount = songCount;
         this.songs = songs;
@@ -34,11 +35,11 @@ public class Playlist implements NotationModel {
     public Playlist(String title, int songCount) {
         this.title = title;
         this.songCount = songCount;
-        this.songs = new ArrayList<>();
+        this.songs = new LinkedList<>();
     }
     
     public Playlist() {
-        this.songs = new ArrayList<>();
+        this.songs = new LinkedList<>();
     }
     
     public void addMusic(Music music) {
@@ -78,7 +79,7 @@ public class Playlist implements NotationModel {
         
         String[] songsStr = reader.get("songs").split(",");
         
-        ArrayList<Music> songs = new ArrayList<>();
+        LinkedList<Music> songs = new LinkedList<>();
         
         if (songCount != 0) {
             for (String id : songsStr) {
