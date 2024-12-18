@@ -20,6 +20,7 @@ import mdlaf.themes.MaterialOceanicTheme;
 public class SonglyForm extends javax.swing.JFrame {
     private final MediaPlayer player;
     private boolean isSeeking;
+    public static SonglyForm instance;
     /**
      * Creates new form SonglyForm
      */
@@ -47,6 +48,7 @@ public class SonglyForm extends javax.swing.JFrame {
         
         // we refresh the playlist here, so it will render all the item
         refreshPlaylist();
+        instance = this;
     }
 
     /**
@@ -409,6 +411,11 @@ public class SonglyForm extends javax.swing.JFrame {
             // setup delete event
             (pl) -> {
                 AppState.removePlaylist(pl);
+                AppState.save();
+                refreshPlaylist();
+            },
+            (pl, name) -> {
+                AppState.renamePlaylist(pl, name);
                 AppState.save();
                 refreshPlaylist();
             });

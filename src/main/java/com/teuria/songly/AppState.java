@@ -71,7 +71,7 @@ public class AppState {
     
     public static boolean hasPlaylist(String name) {
         for (Playlist playlist : playlists) {
-            if (playlist.getTitle().contains(name)) {
+            if (playlist.getTitle().equals(name)) {
                 return true;
             }
         }
@@ -81,6 +81,12 @@ public class AppState {
     
     public static void removePlaylist(Playlist playlist) {
         playlists.remove(playlist);
+    }
+    
+    public static void renamePlaylist(Playlist playlist, String name) {
+        playlistMap.remove(playlist.getTitle());
+        playlist.setTitle(name);
+        playlistMap.put(name, playlist);
     }
     
     public static void addMusicToPlaylist(String playlistName, Music music) {
@@ -156,6 +162,13 @@ public class AppState {
     public static Collection<String> getFolders() {
         return folders;
     }
+    
+    // home/music
+    
+    // song1:
+    // directory: home/music
+    
+    // song1.directory == home/music
     
     public static void removeFolder(String folder) {
         folders.remove(folder);

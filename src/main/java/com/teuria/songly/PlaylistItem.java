@@ -4,6 +4,7 @@
  */
 package com.teuria.songly;
 
+import com.teuria.songly.events.PlaylistEditOkEvent;
 import com.teuria.songly.events.PlaylistItemClickEvent;
 import com.teuria.songly.events.PlaylistItemDeleteEvent;
 import com.teuria.songly.models.Playlist;
@@ -18,17 +19,20 @@ public class PlaylistItem extends javax.swing.JPanel {
     private Playlist playlist;
     private PlaylistItemClickEvent clickEvent;
     private PlaylistItemDeleteEvent delEvent;
+    private PlaylistEditOkEvent okEvent;
     
     public PlaylistItem(
             Playlist playlist, 
             PlaylistItemClickEvent clickEvent,
-            PlaylistItemDeleteEvent delEvent
+            PlaylistItemDeleteEvent delEvent,
+            PlaylistEditOkEvent okEvent
     ) {
         initComponents();
         this.playlist = playlist;
         this.playlistTitle.setText(playlist.getTitle());
         this.clickEvent = clickEvent;
         this.delEvent = delEvent;
+        this.okEvent = okEvent;
     }
 
     /**
@@ -42,6 +46,7 @@ public class PlaylistItem extends javax.swing.JPanel {
 
         playlistTitle = new javax.swing.JLabel();
         delBtn = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         setMaximumSize(new java.awt.Dimension(32767, 64));
@@ -62,6 +67,13 @@ public class PlaylistItem extends javax.swing.JPanel {
             }
         });
 
+        editBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.CREATE, 24, new java.awt.Color(255, 255, 255)));
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,7 +81,9 @@ public class PlaylistItem extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(playlistTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 382, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
+                .addComponent(editBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(delBtn)
                 .addContainerGap())
         );
@@ -77,9 +91,10 @@ public class PlaylistItem extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(playlistTitle)
-                    .addComponent(delBtn))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(editBtn)
+                    .addComponent(delBtn)
+                    .addComponent(playlistTitle))
                 .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -101,9 +116,15 @@ public class PlaylistItem extends javax.swing.JPanel {
         delEvent.run(playlist);
     }//GEN-LAST:event_delBtnActionPerformed
 
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        PlaylistEditForm form = new PlaylistEditForm(playlist, okEvent);
+        form.setVisible(true);
+    }//GEN-LAST:event_editBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton delBtn;
+    private javax.swing.JButton editBtn;
     private javax.swing.JLabel playlistTitle;
     // End of variables declaration//GEN-END:variables
 }

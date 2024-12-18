@@ -125,7 +125,7 @@ public class MusicBankPanel extends javax.swing.JPanel {
         JFileChooser jfc = new JFileChooser();
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = jfc.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
+        if (result == 0) {
             File file = jfc.getSelectedFile();
             pathField.setText(file.toString());
         }
@@ -136,6 +136,7 @@ public class MusicBankPanel extends javax.swing.JPanel {
         folderList.revalidate();
         folderList.repaint();
         for (String str : AppState.getFolders()) {
+            // function na walang pangalan
             folderList.add(new MusicBankItem(str, (path) -> {
                 AppState.removeFolder(path);
                 refresh();

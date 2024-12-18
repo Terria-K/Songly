@@ -76,13 +76,11 @@ public class MusicBankItem extends javax.swing.JPanel {
         int input = JOptionPane.showConfirmDialog(null, "Are you sure you want "
                 + "to remove this directory?");
         
-        // if the input is not 0 which is ok, then we do not proceed further
-        if (input != 0) {
-            return;
+        // if the input is 0 which is ok, then we do proceed further
+        if (input == 0) {
+            // lets fire up the delete event
+            this.delEvent.run(this.path);
         }
-        
-        // lets fire up the delete event
-        this.delEvent.run(this.path);
     }//GEN-LAST:event_delBtnActionPerformed
 
 

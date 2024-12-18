@@ -9,7 +9,7 @@ public class Music implements NotationModel {
     private String title;
     private String artist;
     private String album;
-    private String directory;
+    private String directory; 
     private String path;
     private String id;
 
