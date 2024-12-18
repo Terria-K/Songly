@@ -36,6 +36,7 @@ public class MusicBankItem extends javax.swing.JPanel {
 
         pathText = new javax.swing.JLabel();
         delBtn = new javax.swing.JButton();
+        refreshBtn = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(32767, 59));
 
@@ -49,6 +50,13 @@ public class MusicBankItem extends javax.swing.JPanel {
             }
         });
 
+        refreshBtn.setIcon(jiconfont.swing.IconFontSwing.buildIcon(jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons.REFRESH, 24, new java.awt.Color(255, 255, 255)));
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -56,7 +64,9 @@ public class MusicBankItem extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pathText)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 358, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 280, Short.MAX_VALUE)
+                .addComponent(refreshBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(delBtn)
                 .addContainerGap())
         );
@@ -65,6 +75,7 @@ public class MusicBankItem extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(refreshBtn)
                     .addComponent(delBtn)
                     .addComponent(pathText))
                 .addContainerGap(18, Short.MAX_VALUE))
@@ -83,9 +94,15 @@ public class MusicBankItem extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_delBtnActionPerformed
 
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        AppState.index(path);
+        AppState.save();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton delBtn;
     private javax.swing.JLabel pathText;
+    private javax.swing.JButton refreshBtn;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,7 +17,14 @@ public class MusicItem extends javax.swing.JPanel {
         initComponents();
         this.music = music;
         title.setText(music.getTitle());
-        artist.setText(music.getArtist());
+        
+        // if the music.getArtist doesn't exist, just set it to empty string
+        if (music.getArtist().equals("null")) {
+            artist.setText("");
+        } else {
+            artist.setText(music.getArtist());            
+        }
+
         this.clickEvent = evt;
         this.main = main;
     }

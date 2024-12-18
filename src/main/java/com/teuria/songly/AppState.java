@@ -142,7 +142,12 @@ public class AppState {
             return;
         }
         folders.add(folder);
+        index(folder);
+    }
+    
+    public static void index(String folder) {
         Path p = Paths.get(folder);
+        musics.clear();
       
         try (Stream<Path> mp = Files.list(p)) {
             addMusics(

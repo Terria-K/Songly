@@ -450,7 +450,12 @@ public class SonglyForm extends javax.swing.JFrame {
     // the music
     private void onPlayMusic(Music music) {
         // this just change the music information from the control
-        songTitle.setText(music.getTitle() + " - " + music.getArtist());
+        if (!music.getArtist().equals("null")) {
+            songTitle.setText(music.getTitle() + " - " + music.getArtist());            
+        } else {
+            songTitle.setText(music.getTitle());
+        }
+
         destinationLabel.setText(player.getTimeEndFormatted());
         slider.setMaximum((int)player.getTimeEnd());
     }
