@@ -127,6 +127,7 @@ public class MediaPlayer {
         if (!isInitialized) {
             return;
         }
+        paused = false;
         
         if (currentPlaylist == null) {
             int index = AppState.getIndexFromMusic(music);
